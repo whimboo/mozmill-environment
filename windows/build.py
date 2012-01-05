@@ -26,6 +26,14 @@ env_dir = path_join(base_dir, "mozmill-env")
 msys_dir = path_join(env_dir, "msys")
 python_dir = path_join(env_dir, "python")
 
+
+def remove_files(pattern):
+    '''Removes all the files matching the given pattern recursively.'''
+    files = glob.glob(pattern)
+    for a_file in files:
+        os.remove(a_file)
+
+
 def download(url, filename):
     '''Download a remote file from an URL to the specified local folder.'''
 
@@ -58,8 +66,9 @@ if not args:
                  " required as first parameter.")
 mozmill_version = args[0]
 
-logging.info("Delete an already existent environment sub folder")
-shutil.rmtree(env_dir, True)
+logging.info("Delete all possible existent folders")
+for directory in (download_dir, env_dir, msys_dir):
+    shutil.rmtree(directory, True)
 
 logging.info("Download and install 'MSYS' in unattended mode. "
              "Answer questions with 'y' and 'n'.")
@@ -82,7 +91,6 @@ shutil.copytree(template_dir, env_dir, True)
 
 logging.info("Copy Python installation (including pythonXX.dll into environment")
 shutil.copytree(sys.prefix, path_join(env_dir, 'python'), True)
-shutil.copytree(template_dir, env_dir, True)
 dlls = glob.glob(path_join(os.environ['WINDIR'], "system32", "python*.dll"))
 for dll_file in dlls:
     shutil.copy(dll_file, python_dir)
@@ -94,11 +102,11 @@ subprocess.check_call(["python", filename, "--no-site-packages", "mozmill-env"])
 
 logging.info("Reorganizing folder structure")
 shutil.move(path_join(env_dir, "Scripts"), python_dir)
-python_scripts_dir = path_join(python_dir, "Scripts")
 shutil.rmtree(path_join(python_dir, "Lib", "site-packages"), True)
 shutil.move(path_join(env_dir, "Lib", "site-packages"),
             path_join(python_dir, "Lib"))
 shutil.rmtree(path_join(env_dir, "Lib"), True)
+python_scripts_dir = path_join(python_dir, "Scripts")
 make_relocatable(path_join(python_scripts_dir, "*.py"))
 
 logging.info("Installing required Python modules")
@@ -111,15 +119,11 @@ make_relocatable(path_join(python_scripts_dir, "*.py"))
 make_relocatable(path_join(python_scripts_dir, "hg"))
 
 logging.info("Deleting easy_install and pip scripts")
-script_files = glob.glob(path_join(python_scripts_dir, "easy_install*")) +\
-               glob.glob(path_join(python_scripts_dir, "pip*"))
-for s_file in script_files:
-    os.remove(s_file)
+for pattern in ('easy_install*', 'pip*'):
+    remove_files(path_join(python_scripts_dir, pattern))
 
 logging.info("Deleting pre-compiled Python modules and build folder")
-pyc_files = glob.glob(path_join(python_dir, "*.pyc"))
-for pyc_file in pyc_files:
-    os.remove(pyc_file)
+remove_files(path_join(python_dir, "*.pyc"))
 shutil.rmtree(path_join(env_dir, "build"), True)
 
 logging.info("Building zip archive of environment")
