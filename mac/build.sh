@@ -36,7 +36,7 @@ pip install --upgrade --global-option="--pure" mercurial==1.9.3
 pip install --upgrade simplejson
 
 echo "Installing Mozmill $MOZMILL_VERSION"
-pip install mozmill==$MOZMILL_VERSION
+pip install --upgrade mozmill==$MOZMILL_VERSION
 
 echo "Deactivating the environment"
 deactivate

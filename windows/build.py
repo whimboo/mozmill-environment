@@ -95,9 +95,9 @@ make_relocatable("%s\\Scripts\\*.py" % (python_dir))
 
 print "Installing required Python modules"
 subprocess.check_call(["%s\\run.cmd" % env_dir, "pip", "install",
-                       "--global-option='--pure'", "mercurial==1.9.3"])
+                       "--upgrade", "--global-option='--pure'", "mercurial==1.9.3"])
 subprocess.check_call(["%s\\run.cmd" % env_dir, "pip", "install",
-                       "mozmill==%s" % (mozmill_version)])
+                       "--upgrade", "mozmill==%s" % (mozmill_version)])
 make_relocatable("%s\\Scripts\\*.py" % (python_dir))
 make_relocatable("%s\\Scripts\\hg" % (python_dir))
 
