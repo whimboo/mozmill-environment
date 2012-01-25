@@ -6,7 +6,7 @@ VIRTUALENV_URL=https://bitbucket.org/ianb/virtualenv/raw/1.5.2/virtualenv.py
 
 ENV_DIR=mozmill-env
 PYTHON_VERSION=$(python -c "import sys;print sys.version[:3]")
-TARGET_ARCHIVE=$MOZMILL_VERSION-$(dirname $(pwd))/$(basename $(pwd)).zip
+TARGET_ARCHIVE=$(dirname $(pwd))/$MOZMILL_VERSION-$(basename $(pwd)).zip
 
 
 cleanup () {
