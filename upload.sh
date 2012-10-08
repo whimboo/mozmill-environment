@@ -3,4 +3,4 @@
 TARGET_LOCATION="public_html/downloads/mozmill-env/"
 
 scp *.zip people:$TARGET_LOCATION
-# rm *.zip
+rm *.zip
