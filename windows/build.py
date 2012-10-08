@@ -161,9 +161,9 @@ subprocess.check_call([run_cmd_path, "pip", "install",
                        "--upgrade", "--global-option='--pure'",
                        "mercurial==%s" % VERSION_MERCURIAL])
 
-logging.info("Installing Mozmill %s and related packages" % (mozmill_version))
+logging.info("Installing Mozmill %s and related packages" % mozmill_version)
 subprocess.check_call([run_cmd_path, "pip", "install",
-                       "--upgrade", "mozmill==%s" % (mozmill_version)])
+                       "--upgrade", "mozmill==%s" % mozmill_version])
 subprocess.check_call([run_cmd_path, "pip", "install",
                        "--upgrade", "mozdownload==%s" % VERSION_MOZDOWNLOAD])
 
