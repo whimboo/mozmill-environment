@@ -2,8 +2,9 @@
 
 VERSION_MOZMILL=$1
 
-VERSION_MERCURIAL=2.1
+VERSION_MERCURIAL=2.6
 VERSION_MOZDOWNLOAD=1.7.2
+VERSION_MOZMILL_AUTOMATION=1.5.21
 VERSION_PYTHON=$(python -c "import sys;print sys.version[:3]")
 
 ENV_DIR=mozmill-env
@@ -38,6 +39,7 @@ pip install --upgrade simplejson
 echo "Installing Mozmill $VERSION_MOZMILL and related packages"
 pip install --upgrade mozmill==$VERSION_MOZMILL
 pip install --upgrade mozdownload==$VERSION_MOZDOWNLOAD
+pip install --upgrade mozmill_automation==$VERSION_MOZMILL_AUTOMATION
 
 echo "Deactivating the environment"
 deactivate

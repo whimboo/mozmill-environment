@@ -15,6 +15,7 @@ import zipfile
 
 VERSION_MERCURIAL = "2.1"
 VERSION_MOZDOWNLOAD = "1.7.2"
+VERSION_MOZMILL_AUTOMATION = "1.5.21"
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -163,6 +164,8 @@ subprocess.check_call([run_cmd_path, "pip", "install",
 logging.info("Installing Mozmill %s and related packages" % mozmill_version)
 subprocess.check_call([run_cmd_path, "pip", "install",
                        "--upgrade", "mozmill==%s" % mozmill_version])
+subprocess.check_call([run_cmd_path, "pip", "install",
+                       "--upgrade", "mozmill_automation==%s" % VERSION_MOZMILL_AUTOMATION])
 subprocess.check_call([run_cmd_path, "pip", "install",
                        "--upgrade", "mozdownload==%s" % VERSION_MOZDOWNLOAD])
 
