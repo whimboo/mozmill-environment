@@ -15,7 +15,6 @@ import zipfile
 
 VERSION_MERCURIAL = "2.6"
 VERSION_MOZDOWNLOAD = "1.7.2"
-VERSION_MOZMILL_AUTOMATION = "1.5.21"
 
 base_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -108,7 +107,7 @@ parser = optparse.OptionParser()
 
 if not args:
     parser.error("Version of Mozmill to be installed is required as first parameter.")
-mozmill_version = args[0]
+VERSION_MOZMILL_AUTOMATION = args[0]
 
 logging.info("Delete all possible existent folders")
 shutil.rmtree(env_dir, True)
@@ -163,11 +162,9 @@ subprocess.check_call([run_cmd_path, "pip", "install",
 
 logging.info("Installing Mozmill %s and related packages" % mozmill_version)
 subprocess.check_call([run_cmd_path, "pip", "install",
-                       "--upgrade", "mozmill==%s" % mozmill_version])
+                       "--upgrade", "mozdownload==%s" % VERSION_MOZDOWNLOAD])
 subprocess.check_call([run_cmd_path, "pip", "install",
                        "--upgrade", "mozmill_automation==%s" % VERSION_MOZMILL_AUTOMATION])
-subprocess.check_call([run_cmd_path, "pip", "install",
-                       "--upgrade", "mozdownload==%s" % VERSION_MOZDOWNLOAD])
 
 make_relocatable(os.path.join(python_scripts_dir, "*.py"))
 make_relocatable(os.path.join(python_scripts_dir, "hg"))
