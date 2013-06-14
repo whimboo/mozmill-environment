@@ -16,7 +16,7 @@ cleanup () {
 }
 
 if [ ! -n "$1" ] ; then
-  echo Version of Mozmill to be installed is required as first parameter.
+  echo Version of Mozmill-Automation to be installed is required as first parameter.
   exit 1
 fi
 

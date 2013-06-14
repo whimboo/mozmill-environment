@@ -106,7 +106,7 @@ parser = optparse.OptionParser()
 (options, args) = parser.parse_args()
 
 if not args:
-    parser.error("Version of Mozmill to be installed is required as first parameter.")
+    parser.error("Version of Mozmill-Automation to be installed is required as first parameter.")
 VERSION_MOZMILL_AUTOMATION = args[0]
 
 logging.info("Delete all possible existent folders")
