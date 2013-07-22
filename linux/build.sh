@@ -42,10 +42,7 @@ if [ ! -n "${VIRTUAL_ENV:+1}" ]; then
     exit 1
 fi
 
-echo "Installing required Python modules"
-pip install --upgrade simplejson
-
-echo "Installing Mozmill $VERSION_MOZMILL and related packages"
+echo "Installing Mozmill $VERSION_MOZMILL_AUTOMATION and related packages"
 pip install --upgrade mozmill_automation==$VERSION_MOZMILL_AUTOMATION
 
 echo "Deactivating the environment"

@@ -14,7 +14,7 @@ DIR_BASE=$(cd $(dirname ${BASH_SOURCE}); pwd)
 DIR_ENV=${DIR_BASE}/mozmill-env
 DIR_TMP=${DIR_BASE}/tmp
 
-TARGET_ARCHIVE=$(dirname $(pwd))/$VERSION_MOZMILL-$(basename $(pwd)).zip
+TARGET_ARCHIVE=$(dirname $(pwd))/$VERSION_MOZMILL_AUTOMATION-$(basename $(pwd)).zip
 
 
 cleanup () {
@@ -42,10 +42,7 @@ if [ ! -n "${VIRTUAL_ENV:+1}" ]; then
     exit 1
 fi
 
-echo "Installing required Python modules"
-pip install --upgrade simplejson
-
-echo "Installing Mozmill $VERSION_MOZMILL and related packages"
+echo "Installing Mozmill $VERSION_MOZMILL_AUTOMATION and related packages"
 pip install --upgrade mozmill_automation==$VERSION_MOZMILL_AUTOMATION
 
 echo "Deactivating the environment"
