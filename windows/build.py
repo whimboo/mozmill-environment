@@ -194,9 +194,8 @@ def main():
     make_relocatable(os.path.join(python_scripts_dir, "*.py"))
     make_relocatable(os.path.join(python_scripts_dir, "hg"))
 
-    logging.info("Deleting easy_install and pip scripts")
-    for pattern in ('easy_install*', 'pip*'):
-        remove_files(python_scripts_dir, pattern)
+    logging.info("Deleting pip scripts")
+    remove_files(python_scripts_dir, "pip*")
 
     logging.info("Deleting pre-compiled Python modules and build folder")
     remove_files(dir_python, "*.pyc")
