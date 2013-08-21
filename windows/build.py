@@ -194,9 +194,6 @@ def main():
     make_relocatable(os.path.join(python_scripts_dir, "*.py"))
     make_relocatable(os.path.join(python_scripts_dir, "hg"))
 
-    logging.info("Deleting pip scripts")
-    remove_files(python_scripts_dir, "pip*")
-
     logging.info("Deleting pre-compiled Python modules and build folder")
     remove_files(dir_python, "*.pyc")
     shutil.rmtree(os.path.join(dir_env, "build"), True)
