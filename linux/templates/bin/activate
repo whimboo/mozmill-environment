@@ -22,11 +22,10 @@ deactivate () {
         unset _OLD_PS1
     fi
 
-    if [ -n "$_OLD_PYTHONPATH" ] ; then
-        PYTHONPATH="$_OLD_PYTHONPATH"
-        export PYTHONPATH
-        unset _OLD_PYTHONPATH
-    fi
+    # Resets PYTHONPATH to previous state
+    PYTHONPATH="$_OLD_PYTHONPATH"
+    export PYTHONPATH
+    unset _OLD_PYTHONPATH
 
     unset ENV_PATH
     unset MOZMILL_ROOT
