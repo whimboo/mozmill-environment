@@ -159,11 +159,11 @@ def main():
     msys_dll_zip.extractall(os.path.join(dir_msys, 'bin'))
     msys_dll_zip.close()
 
-    logging.info("Installing 'mintty'")
-    mintty_file = os.path.join(dir_assets, 'msys_mintty.zip')
-    mintty_zip = zipfile.ZipFile(mintty_file, 'r')
-    mintty_zip.extract('mintty.exe', os.path.join(dir_msys, 'bin'))
-    mintty_zip.close()
+    logging.info("Install 'ConEmu'")
+    conemu_file = os.path.join(dir_assets, 'ConEmu.zip')
+    conemu_zip = zipfile.ZipFile(conemu_file, "r")
+    conemu_zip.extractall(os.path.join(dir_env, "ConEmu"))
+    conemu_zip.close()
 
     logging.info('Copying template files into environment')
     copytree(dir_template, dir_env, True)
