@@ -23,9 +23,11 @@ deactivate () {
     fi
 
     # Resets PYTHONPATH to previous state
-    PYTHONPATH="$_OLD_PYTHONPATH"
-    export PYTHONPATH
-    unset _OLD_PYTHONPATH
+    if [ "$_OLD_PYTHONPATH" == "${_OLD_PYTHONPATH-unset}"] ; then
+        PYTHONPATH="$_OLD_PYTHONPATH"
+        export PYTHONPATH
+        unset _OLD_PYTHONPATH
+    fi
 
     unset ENV_PATH
     unset MOZMILL_ROOT
