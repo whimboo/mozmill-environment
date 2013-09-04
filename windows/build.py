@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import ConfigParser
 import ctypes
 import fileinput
 import fnmatch
@@ -16,6 +17,12 @@ import zipfile
 # Link to the folder which contains the zip archives of virtualenv
 URL_VIRTUALENV = 'https://codeload.github.com/pypa/virtualenv/zip/'
 
+# Link to 7z unpacker
+URL_7Z = 'http://downloads.sourceforge.net/project/sevenzip/7-Zip/9.20/7za920.zip'
+
+# Link to ConEmu installer
+URL_CONEMU_VERSIONS_MANIFEST = 'http://conemu-maximus5.googlecode.com/svn/trunk/ConEmu/version.ini'
+
 VERSION_MERCURIAL = '2.6.2'
 VERSION_MOZDOWNLOAD = '1.9'
 VERSION_VIRTUALENV = '1.9.1'
@@ -27,6 +34,38 @@ dir_msys = os.path.join(dir_env, 'msys')
 dir_python = os.path.join(dir_env, 'python')
 dir_tmp=os.path.join(dir_base, 'tmp')
 dir_template = os.path.join(dir_base, 'templates')
+
+
+def download_7z():
+    """
+    Downloads portable, commandline version of 7z unpacker for Windows.
+    Returns path to unpacked 7zip executable.
+    """
+    sevenzip_file = download(URL_7Z, os.path.join(dir_tmp, '7z.zip'))
+    sevenzip_dir = os.path.join(dir_tmp, '7z')
+    os.makedirs(sevenzip_dir)
+    sevenzip_zipfile = zipfile.ZipFile(sevenzip_file)
+    sevenzip_zipfile.extractall(sevenzip_dir)
+    sevenzip_zipfile.close()
+    return os.path.join(sevenzip_dir, '7za.exe')
+
+
+def download_conemu(build_type='Preview'):
+    """
+    Downloads latest available version of ConEmu for defined build type.
+    Available types:
+    Preview, Devel
+    We don't support Stable version because it does not support loading xml config from commandline.
+    Returns downloaded version and path to downloaded file.
+    """
+    versions_manifest = download(URL_CONEMU_VERSIONS_MANIFEST, os.path.join(dir_tmp, 'conemu_versions.ini'))
+    versions_config = ConfigParser.SafeConfigParser()
+    versions_config.read(versions_manifest)
+    section = "ConEmu_%s" % build_type
+    version = versions_config.get(section, 'version')
+    location_url = versions_config.get(section, 'location_arc').split(',')[-1]
+    filename = download(location_url, os.path.join(dir_tmp, 'conemu.7z'))
+    return filename, version
 
 
 def copytree(src, dst, symlinks=False, ignore=None):
@@ -159,11 +198,17 @@ def main():
     msys_dll_zip.extractall(os.path.join(dir_msys, 'bin'))
     msys_dll_zip.close()
 
-    logging.info("Install 'ConEmu'")
-    conemu_file = os.path.join(dir_assets, 'ConEmu.zip')
-    conemu_zip = zipfile.ZipFile(conemu_file, "r")
-    conemu_zip.extractall(os.path.join(dir_env, "ConEmu"))
-    conemu_zip.close()
+    logging.info("Downloading 7zip")
+    unpacker_file = download_7z()
+
+    logging.info('Downloading latest stable version of ConEmu')
+    conemu_file, conemu_version = download_conemu()
+    logging.info('Downloaded version of ConEmu: %s' % conemu_version)
+    logging.info('Unpackaging ConEmu inside environment')
+    conemu_tmp = os.path.join(dir_tmp, 'conemu')
+    os.makedirs(conemu_tmp)
+    subprocess.check_call([unpacker_file, 'x', '-o%s' % conemu_tmp, conemu_file])
+    copytree(conemu_tmp, os.path.join(dir_env, 'conemu'))
 
     logging.info('Copying template files into environment')
     copytree(dir_template, dir_env, True)
