@@ -182,8 +182,7 @@ def main():
     logging.info("Installing required Python modules")
     run_cmd_path = os.path.join(dir_env, "run.cmd")
     subprocess.check_call([run_cmd_path, "pip", "install",
-                           "--upgrade", "--global-option='--pure'",
-                           "mercurial==%s" % VERSION_MERCURIAL])
+                           "--upgrade", "mercurial==%s" % VERSION_MERCURIAL])
 
     logging.info("Installing Mozmill %s and related packages" % mozmill_version)
     subprocess.check_call([run_cmd_path, "pip", "install",
