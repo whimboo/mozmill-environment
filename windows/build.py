@@ -120,7 +120,7 @@ def main():
 
     if not ctypes.windll.shell32.IsUserAnAdmin():
         logging.error("Sorry, this script requires administrative privileges.")
-        sys.exit(-1)
+        sys.exit(126)
 
     if not args:
         parser.error("Version of Mozmill to be installed is required as first parameter.")
