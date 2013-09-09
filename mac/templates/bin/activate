@@ -3,6 +3,8 @@
 
 # Inject command to deactivate the environment
 deactivate () {
+    # deactivate resets PATH, PS1 and PYTHONPATH to their previous state
+    # from before activation
     if [ "$_OLD_PATH" == "${_OLD_PATH-unset}" ] ; then
         PATH="$_OLD_PATH"
         export PATH
@@ -22,7 +24,6 @@ deactivate () {
         unset _OLD_PS1
     fi
 
-    # Resets PYTHONPATH to previous state
     if [ "$_OLD_PYTHONPATH" == "${_OLD_PYTHONPATH-unset}" ] ; then
         PYTHONPATH="$_OLD_PYTHONPATH"
         export PYTHONPATH
