@@ -42,7 +42,7 @@ if [ ! -n "${VIRTUAL_ENV:+1}" ]; then
     exit 1
 fi
 
-echo "Pre-installing Mercurial $VERSION_MERCURIAL in pure mode"
+echo "Pre-installing mercurial $VERSION_MERCURIAL in pure mode"
 pip install --upgrade --global-option="--pure" mercurial==$VERSION_MERCURIAL
 
 echo "Installing mozmill-automation $VERSION_MOZMILL_AUTOMATION and related packages"

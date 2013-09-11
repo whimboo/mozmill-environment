@@ -186,12 +186,12 @@ def main():
 
     run_cmd_path = os.path.join(dir_env, "run.cmd")
 
-    logging.info("Pre-installing Mercurial %s in pure mode" % VERSION_MERCURIAL)
+    logging.info("Pre-installing mercurial %s in pure mode" % VERSION_MERCURIAL)
     subprocess.check_call([run_cmd_path, "pip", "install",
                            "--upgrade", "--global-option='--pure'",
                            "mercurial==%s" % VERSION_MERCURIAL])
 
-    logging.info("Installing Mozmill-Automation %s and related packages" % mozmill_automation_version)
+    logging.info("Installing mozmill-automation %s and related packages" % mozmill_automation_version)
     subprocess.check_call([run_cmd_path, "pip", "install",
                            "--upgrade", "mozmill-automation==%s" %
                                mozmill_automation_version])
