@@ -207,7 +207,7 @@ def main():
     remove_files(dir_python, "*.pyc")
     shutil.rmtree(os.path.join(dir_env, "build"), True)
 
-    logging.info("Deleting build account msys home directory")
+    logging.info("Deleting MSYS home directory")
     shutil.rmtree(os.path.join(dir_msys, 'home'))
 
     logging.info("Building zip archive of environment")
