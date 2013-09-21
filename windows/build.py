@@ -18,7 +18,7 @@ import zipfile
 URL_VIRTUALENV = 'https://codeload.github.com/pypa/virtualenv/zip/'
 
 # Link to 7z unpacker
-URL_7Z = 'http://downloads.sourceforge.net/project/sevenzip/7-Zip/9.20/7za920.zip'
+URL_7Z = 'http://downloads.sourceforge.net/project/sevenzip/7-Zip/'
 
 # Link to ConEmu installer
 URL_CONEMU_VERSIONS_MANIFEST = 'http://conemu-maximus5.googlecode.com/svn/trunk/ConEmu/version.ini'
@@ -26,6 +26,8 @@ URL_CONEMU_VERSIONS_MANIFEST = 'http://conemu-maximus5.googlecode.com/svn/trunk/
 VERSION_MERCURIAL = '2.6.2'
 VERSION_MOZDOWNLOAD = '1.9'
 VERSION_VIRTUALENV = '1.9.1'
+VERSION_7Z = '9.20'
+VERSION_7Z_SHORT = VERSION_7Z.replace('.', '')
 
 dir_base = os.path.abspath(os.path.dirname(__file__))
 dir_assets = os.path.join(dir_base, os.path.pardir, 'assets')
@@ -36,18 +38,43 @@ dir_tmp=os.path.join(dir_base, 'tmp')
 dir_template = os.path.join(dir_base, 'templates')
 
 
-def download_7z():
+def prepare_build():
     """
-    Downloads portable, commandline version of 7z unpacker for Windows.
-    Returns path to unpacked 7zip executable.
+    Prepares necessary tools for building environment.
+
     """
-    sevenzip_file = download(URL_7Z, os.path.join(dir_tmp, '7z.zip'))
+    logging.info("Delete all possible existent folders")
+    shutil.rmtree(dir_env, True)
+
+    # Ensure we have a clean and existent temporary directory
+    shutil.rmtree(dir_tmp, True)
+    os.makedirs(dir_tmp)
+
+    logging.info('Downloading virtualenv %s' % VERSION_VIRTUALENV)
+    virtualenv_file = download(URL_VIRTUALENV + VERSION_VIRTUALENV,
+                               os.path.join(dir_tmp, 'virtualenv.zip'))
+    virtualenv_zip = zipfile.ZipFile(virtualenv_file)
+    virtualenv_zip.extractall(dir_tmp)
+    virtualenv_zip.close()
+
+    logging.info("Downloading 7zip")
+    sevenzip_path = '/'.join([VERSION_7Z, '7za%s.zip' % VERSION_7Z_SHORT])
+    sevenzip_file = download(URL_7Z + sevenzip_path,
+                            os.path.join(dir_tmp, '7z.zip'))
     sevenzip_dir = os.path.join(dir_tmp, '7z')
     os.makedirs(sevenzip_dir)
     sevenzip_zipfile = zipfile.ZipFile(sevenzip_file)
     sevenzip_zipfile.extractall(sevenzip_dir)
     sevenzip_zipfile.close()
-    return os.path.join(sevenzip_dir, '7za.exe')
+    sevenzip_file  = os.path.join(sevenzip_dir, '7za.exe')
+
+    logging.info('Downloading latest preview version of ConEmu')
+    conemu_file, conemu_version = download_conemu()
+    logging.info('Downloaded version of ConEmu: %s' % conemu_version)
+    logging.info('Unpackaging ConEmu inside environment')
+    conemu_tmp = os.path.join(dir_tmp, 'conemu')
+    os.makedirs(conemu_tmp)
+    subprocess.check_call([sevenzip_file, 'x', '-o%s' % dir_env, conemu_file])
 
 
 def download_conemu(build_type='Preview'):
@@ -166,51 +193,9 @@ def main():
         parser.error('Version of Mozmill-Automation to be installed is required as first parameter.')
     mozmill_automation_version = args[0]
 
-    logging.info('Deleting all possible existent folders')
-    shutil.rmtree(dir_env, True)
+    prepare_build()
 
-    # Ensure we have a clean and existent temporary directory
-    shutil.rmtree(dir_tmp, True)
-    os.makedirs(dir_tmp)
-
-    logging.info('Downloading virtualenv %s' % VERSION_VIRTUALENV)
-    virtualenv_file = download(URL_VIRTUALENV + VERSION_VIRTUALENV,
-                               os.path.join(dir_tmp, 'virtualenv.zip'))
-    virtualenv_zip = zipfile.ZipFile(virtualenv_file)
-    virtualenv_zip.extractall(dir_tmp)
-    virtualenv_zip.close()
-
-    logging.info('Creating new virtual environment')
-    virtualenv_script = os.path.join(dir_tmp,
-                                     'virtualenv-%s' % VERSION_VIRTUALENV,
-                                     'virtualenv.py')
-    subprocess.check_call(['python', virtualenv_script, dir_env])
-
-    logging.info("Installing 'MSYS' in unattended mode. Answer questions with 'y' and 'n'.")
-    # See: http://www.jrsoftware.org/ishelp/index.php?topic=setupcmdline
-    msys_file = os.path.join(dir_assets, 'msys_setup.exe')
-    subprocess.check_call([msys_file, '/VERYSILENT', '/SP-', '/NOICONS',
-                           '/DIR=%s' % (dir_msys)])
-
-    logging.info('Replacing MSYS DLLs with memory rebased versions.')
-    msys_dll_file = os.path.join(dir_assets, 'msys_dll.zip')
-    msys_dll_zip = zipfile.ZipFile(msys_dll_file, 'r')
-    msys_dll_zip.extractall(os.path.join(dir_msys, 'bin'))
-    msys_dll_zip.close()
-
-    logging.info("Downloading 7zip")
-    unpacker_file = download_7z()
-
-    logging.info('Downloading latest stable version of ConEmu')
-    conemu_file, conemu_version = download_conemu()
-    logging.info('Downloaded version of ConEmu: %s' % conemu_version)
-    logging.info('Unpackaging ConEmu inside environment')
-    conemu_tmp = os.path.join(dir_tmp, 'conemu')
-    os.makedirs(conemu_tmp)
-    subprocess.check_call([unpacker_file, 'x', '-o%s' % conemu_tmp, conemu_file])
-    copytree(conemu_tmp, os.path.join(dir_env, 'conemu'))
-
-    logging.info('Copying template files into environment')
+    logging.info("Copy template files into environment")
     copytree(dir_template, dir_env, True)
 
     logging.info('Copying Python installation (including pythonXX.dll into environment)')

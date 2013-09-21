@@ -500,7 +500,7 @@
 			<value name="WndDragKey" type="dword" data="00121101"/>
 				<key name="Tasks" modified="2013-08-30 00:47:09" build="130827">
 				<value name="Count" type="dword" data="00000001"/>
-						<key name="Task1" modified="2013-08-30 00:47:09" build="130827">
+				<key name="Task1" modified="2013-08-30 00:47:09" build="130827">
 					<value name="Name" type="string" data="{MozmillShell}"/>
 					<value name="GuiArgs" type="string" data=""/>
 					<value name="Cmd1" type="string" data="%ConEmuDir%\\..\\msys\\bin\\bash.exe --login -i"/>
