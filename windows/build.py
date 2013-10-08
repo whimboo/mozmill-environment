@@ -31,10 +31,12 @@ dir_template = os.path.join(dir_base, 'templates')
 
 def copytree(src, dst, symlinks=False, ignore=None):
     """
-    Copy of shutil.copytree with proper exception handling when the target
-    directory exists. (a simple try-except block addition)
-    """
+    A copy of shutil.copytree.
 
+    Includes proper exception handling when the target
+    directory exists. (a simple try-except block addition)
+
+    """
     names = os.listdir(src)
     if ignore is not None:
         ignored_names = ignore(src, names)
@@ -79,8 +81,7 @@ def copytree(src, dst, symlinks=False, ignore=None):
 
 
 def download(url, target):
-    """Downloads the specified url to the given target"""
-
+    """Downloads the specified url to the given target."""
     response = urllib2.urlopen(url)
     with open(target, 'wb') as f:
         f.write(response.read())
@@ -90,7 +91,6 @@ def download(url, target):
 
 def remove_files(dir_base, pattern):
     """Removes all the files matching the given pattern recursively."""
-
     files = [os.path.join(root, filename)
              for root, dirnames, filenames in os.walk(dir_base)
                 for filename in fnmatch.filter(filenames, pattern)]
@@ -100,8 +100,7 @@ def remove_files(dir_base, pattern):
 
 
 def make_relocatable(filepath):
-    """Remove python path from the Scripts"""
-
+    """Remove python path from the Scripts."""
     files = glob.glob(filepath)
     for a_file in files:
         for line in fileinput.input(a_file, inplace=1):
