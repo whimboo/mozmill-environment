@@ -54,7 +54,7 @@ deactivate
 echo "Copying template files and reorganizing folder structure"
 mv $DIR_ENV/lib/python$VERSION_PYTHON/site-packages/ $DIR_ENV/python-lib
 
-FOLDERS="lib/ .Python include/ python-lib/pip* bin/activate* bin/python* bin/pip*"
+FOLDERS="lib/ .Python include/ bin/activate* bin/python*"
 for folder in $FOLDERS ; do
     rm -r $DIR_ENV/$folder
 done
