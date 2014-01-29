@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <key name="Software">
 	<key name="ConEmu">
-		<key name=".Vanilla" modified="2014-01-22 00:35:51" build="140114a">
+		<key name=".Vanilla" modified="2014-01-29 23:16:19" build="140114a">
 			<value name="SingleInstance" type="hex" data="00"/>
 			<value name="KeyboardHooks" type="hex" data="01"/>
 			<value name="UseInjects" type="hex" data="01"/>
@@ -124,8 +124,8 @@
 			<value name="bgImageColors" type="dword" data="ffffffff"/>
 			<value name="bgOperation" type="hex" data="00"/>
 			<value name="bgPluginAllowed" type="hex" data="01"/>
-			<value name="AlphaValue" type="hex" data="e3"/>
-			<value name="AlphaValueSeparate" type="hex" data="01"/>
+			<value name="AlphaValue" type="hex" data="ff"/>
+			<value name="AlphaValueSeparate" type="hex" data="00"/>
 			<value name="AlphaValueInactive" type="hex" data="dd"/>
 			<value name="UserScreenTransparent" type="hex" data="00"/>
 			<value name="ColorKeyTransparent" type="hex" data="00"/>
@@ -135,8 +135,8 @@
 			<value name="ConWnd Width" type="dword" data="00000050"/>
 			<value name="ConWnd Height" type="dword" data="00000019"/>
 			<value name="Cascaded" type="hex" data="01"/>
-			<value name="ConWnd X" type="dword" data="00000008"/>
-			<value name="ConWnd Y" type="dword" data="000000df"/>
+			<value name="ConWnd X" type="dword" data="00000007"/>
+			<value name="ConWnd Y" type="dword" data="000000d9"/>
 			<value name="16bit Height" type="dword" data="00000000"/>
 			<value name="AutoSaveSizePos" type="hex" data="01"/>
 			<value name="IntegralSize" type="hex" data="00"/>
@@ -223,7 +223,7 @@
 			<value name="KeyBarRClick" type="hex" data="01"/>
 			<value name="StatusBar.Show" type="hex" data="01"/>
 			<value name="StatusBar.Flags" type="dword" data="00000002"/>
-			<value name="StatusFontFace" type="string" data="Segoe UI"/>
+			<value name="StatusFontFace" type="string" data="Courier New"/>
 			<value name="StatusFontCharSet" type="dword" data="00000000"/>
 			<value name="StatusFontHeight" type="dword" data="0000000e"/>
 			<value name="StatusBar.Color.Back" type="dword" data="00404040"/>
@@ -325,7 +325,7 @@
 			<value name="PanView.Thumbs.SpaceY2" type="dword" data="00000014"/>
 			<value name="PanView.Thumbs.LabelSpacing" type="dword" data="00000002"/>
 			<value name="PanView.Thumbs.LabelPadding" type="dword" data="00000000"/>
-			<value name="PanView.Thumbs.FontName" type="string" data="Segoe UI"/>
+			<value name="PanView.Thumbs.FontName" type="string" data="Courier New"/>
 			<value name="PanView.Thumbs.FontHeight" type="dword" data="0000000e"/>
 			<value name="PanView.Tiles.ImgSize" type="dword" data="00000030"/>
 			<value name="PanView.Tiles.SpaceX1" type="dword" data="00000004"/>
@@ -334,7 +334,7 @@
 			<value name="PanView.Tiles.SpaceY2" type="dword" data="00000004"/>
 			<value name="PanView.Tiles.LabelSpacing" type="dword" data="00000004"/>
 			<value name="PanView.Tiles.LabelPadding" type="dword" data="00000001"/>
-			<value name="PanView.Tiles.FontName" type="string" data="Segoe UI"/>
+			<value name="PanView.Tiles.FontName" type="string" data="Courier New"/>
 			<value name="PanView.Tiles.FontHeight" type="dword" data="0000000e"/>
 			<value name="PanView.LoadPreviews" type="hex" data="03"/>
 			<value name="PanView.LoadFolders" type="hex" data="01"/>
@@ -516,21 +516,21 @@
 			<value name="DndLKey" type="hex" data="00"/>
 			<value name="DndRKey" type="hex" data="a2"/>
 			<value name="WndDragKey" type="dword" data="00121101"/>
-				<key name="Tasks" modified="2014-01-22 00:35:31" build="140114a">
+				<key name="Tasks" modified="2014-01-29 23:16:20" build="140114a">
 				<value name="Count" type="dword" data="00000001"/>
-						<key name="Task1" modified="2014-01-22 00:35:31" build="140114a">
+				<key name="Task1" modified="2014-01-29 23:16:20" build="140114a">
 					<value name="Name" type="string" data="{MozmillShell}"/>
 					<value name="Hotkey" type="dword" data="00000000"/>
 					<value name="GuiArgs" type="string" data=""/>
-					<value name="Cmd1" type="string" data="&gt; %ConEmuDir%\\msys\\bin\\bash.exe --login -i"/>
+					<value name="Cmd1" type="string" data="&gt; %ConEmuDir%\\..\\msys\\bin\\bash.exe --login -i"/>
 					<value name="Active" type="dword" data="00000001"/>
 					<value name="Count" type="dword" data="00000001"/>
 				</key>
 			</key>
-				<key name="Apps" modified="2014-01-22 00:35:31" build="140114a">
+				<key name="Apps" modified="2014-01-29 23:16:20" build="140114a">
 				<value name="Count" type="dword" data="00000000"/>
 			</key>
-				<key name="Colors" modified="2014-01-22 00:35:31" build="140114a">
+				<key name="Colors" modified="2014-01-29 23:16:20" build="140114a">
 				<value name="Count" type="dword" data="00000000"/>
 			</key>
 		</key>

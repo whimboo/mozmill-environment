@@ -18,6 +18,6 @@ IF %1!==! goto interactive
   goto end
 
 :interactive
-start %ENV%\\ConEmu.exe /LoadCfgFile %ENV%\\ConEmu\\ConEmu.xml /cmd {MozmillShell}
+start %ENV%\\ConEmu\\ConEmu.exe /LoadCfgFile %ENV%\\ConEmu\\ConEmu.xml /cmd {MozmillShell}
 
 :end

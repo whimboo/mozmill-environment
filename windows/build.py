@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this file,
+# You can obtain one at http://mozilla.org/MPL/2.0/.
+
 import ConfigParser
 import ctypes
 import fileinput
@@ -14,20 +18,10 @@ import sys
 import urllib2
 import zipfile
 
-# Link to the folder which contains the zip archives of virtualenv
-URL_VIRTUALENV = 'https://codeload.github.com/pypa/virtualenv/zip/'
-
-# Link to 7z unpacker
-URL_7Z = 'http://downloads.sourceforge.net/project/sevenzip/7-Zip/'
-
-# Link to ConEmu installer
-URL_CONEMU_VERSIONS_MANIFEST = 'http://conemu-maximus5.googlecode.com/svn/trunk/ConEmu/version.ini'
 
 VERSION_MERCURIAL = '2.6.2'
 VERSION_MOZDOWNLOAD = '1.9'
 VERSION_VIRTUALENV = '1.9.1'
-VERSION_7Z = '9.20'
-VERSION_7Z_SHORT = VERSION_7Z.replace('.', '')
 
 dir_base = os.path.abspath(os.path.dirname(__file__))
 dir_assets = os.path.join(dir_base, os.path.pardir, 'assets')
@@ -67,9 +61,9 @@ def prepare_build():
 
     logging.info('Unpackaging ConEmu inside environment')
     conemu_file = os.path.join(dir_assets, 'conemu.7z')
-    conemu_tmp = os.path.join(dir_tmp, 'conemu')
-    os.makedirs(conemu_tmp)
-    subprocess.check_call([sevenzip_file, 'x', '-o%s' % dir_env, conemu_file])
+    conemu_dir_env = os.path.join(dir_env, 'ConEmu')
+    subprocess.check_call([sevenzip_file, 'x', '-o%s' % conemu_dir_env,
+                           conemu_file])
 
 
 def copytree(src, dst, symlinks=False, ignore=None):
@@ -121,15 +115,6 @@ def copytree(src, dst, symlinks=False, ignore=None):
         errors.extend((src, dst, str(why)))
     if errors:
         raise EnvironmentError(errors)
-
-
-def download(url, target):
-    """Downloads the specified url to the given target."""
-    response = urllib2.urlopen(url)
-    with open(target, 'wb') as f:
-        f.write(response.read())
-
-    return target
 
 
 def remove_files(dir_base, pattern):

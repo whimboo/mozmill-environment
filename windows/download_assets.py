@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this file,
+# You can obtain one at http://mozilla.org/MPL/2.0/.
+
 import ConfigParser
 import hashlib
 import logging
@@ -8,13 +13,10 @@ import urllib2
 import zipfile
 
 logging.basicConfig(level=logging.INFO)
-# Link to the folder which contains the zip archives of virtualenv
+
+
 URL_VIRTUALENV = 'https://codeload.github.com/pypa/virtualenv/zip/'
-
-# Link to 7z unpacker
 URL_7Z = 'http://downloads.sourceforge.net/project/sevenzip/7-Zip/'
-
-# Link to ConEmu installer
 URL_CONEMU_VERSIONS_MANIFEST = 'http://conemu-maximus5.googlecode.com/svn/trunk/ConEmu/version.ini'
 
 VERSION_MERCURIAL = '2.6.2'
@@ -38,9 +40,7 @@ def download(url, target):
 
 
 def get_file_hash(filepath):
-    """
-    Returns md5 hash for given filepath.
-    """
+    """ Returns md5 hash for given filepath. """
     md5 = hashlib.md5()
     file_ = open(filepath, 'rb')
     md5.update(file_.read())
@@ -48,10 +48,8 @@ def get_file_hash(filepath):
 
 
 def save_assets_index(fileinfos):
-    """
-    Saves assets index file, index file contains informations about
-    download urls, md5's etc.
-    """
+    """ Saves assets informations about download urls and md5. """
+    
     index_file = open(os.path.join(dir_assets, "index.txt"), "w+")
 
     for file_name, download_url, file_path in fileinfos:
@@ -66,8 +64,7 @@ def save_assets_index(fileinfos):
 
 
 def download_assets():
-    """
-    Prepares necessary tools for building environment.
+    """ Prepares necessary tools for building environment.
     Return a list of assets with informations
     """
     assets = []
@@ -82,11 +79,10 @@ def download_assets():
                               'virtualenv.zip'))
     assets.append(('virtualenv.zip', virtualenv_url, virtualenv_file))
 
-    logging.info("Downloading 7zip")
-    sevenzip_path = '/'.join([VERSION_7Z, '7za%s.zip' % VERSION_7Z_SHORT])
-    sevenzip_url = URL_7Z + sevenzip_path
-    sevenzip_file = download(URL_7Z + sevenzip_path,
-                            os.path.join(dir_assets, '7z.zip'))
+    logging.info("Downloading 7zip %s" % VERSION_7Z_SHORT)
+    sevenzip_url_fragment = '/'.join([VERSION_7Z, '7za%s.zip' % VERSION_7Z_SHORT])
+    sevenzip_url = URL_7Z + sevenzip_url_fragment
+    sevenzip_file = download(sevenzip_url, os.path.join(dir_assets, '7z.zip'))
     assets.append(['7z.zip', sevenzip_url, sevenzip_file])
 
     logging.info('Downloading latest preview version of ConEmu')
@@ -100,10 +96,11 @@ def download_assets():
 def download_conemu(build_type='Preview'):
     """
     Downloads latest available version of ConEmu for defined build type.
-    Available types:
-    Preview, Devel
-    We don't support Stable version because it does not support loading xml config from commandline.
-    Returns downloaded version and path to downloaded file.
+    We don't support Stable version (120727c) because it doesn't support
+    loading xml config from commandline.
+
+    :param build_type: {basestring} build type name e.g. Preview, Devel
+    :return {tuple}: Returns url to file, filename, file's version.
     """
     versions_manifest = download(URL_CONEMU_VERSIONS_MANIFEST, os.path.join(dir_tmp, 'conemu_versions.ini'))
     versions_config = ConfigParser.SafeConfigParser()
