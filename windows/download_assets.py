@@ -21,7 +21,7 @@ URL_CONEMU_VERSIONS_MANIFEST = 'http://conemu-maximus5.googlecode.com/svn/trunk/
 
 VERSION_MERCURIAL = '2.6.2'
 VERSION_MOZDOWNLOAD = '1.9'
-VERSION_VIRTUALENV = '1.9.1'
+VERSION_VIRTUALENV = '1.10.1'
 VERSION_7Z = '9.20'
 VERSION_7Z_SHORT = VERSION_7Z.replace('.', '')
 
@@ -49,7 +49,6 @@ def get_file_hash(filepath):
 
 def save_assets_index(fileinfos):
     """ Saves assets informations about download urls and md5. """
-    
     index_file = open(os.path.join(dir_assets, "index.txt"), "w+")
 
     for file_name, download_url, file_path in fileinfos:

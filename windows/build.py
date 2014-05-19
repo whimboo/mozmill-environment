@@ -21,7 +21,7 @@ import zipfile
 
 VERSION_MERCURIAL = '2.6.2'
 VERSION_MOZDOWNLOAD = '1.9'
-VERSION_VIRTUALENV = '1.9.1'
+VERSION_VIRTUALENV = '1.10.1'
 
 dir_base = os.path.abspath(os.path.dirname(__file__))
 dir_assets = os.path.join(dir_base, os.path.pardir, 'assets')
@@ -59,7 +59,7 @@ def prepare_build():
     sevenzip_zipfile.close()
     sevenzip_file  = os.path.join(sevenzip_dir, '7za.exe')
 
-    logging.info('Unpackaging ConEmu inside environment')
+    logging.info('Extracting ConEmu')
     conemu_file = os.path.join(dir_assets, 'conemu.7z')
     conemu_dir_env = os.path.join(dir_env, 'ConEmu')
     subprocess.check_call([sevenzip_file, 'x', '-o%s' % conemu_dir_env,
@@ -175,7 +175,7 @@ def main():
     msys_dll_zip.extractall(os.path.join(dir_msys, 'bin'))
     msys_dll_zip.close()
 
-    logging.info("Copy template files into environment")
+    logging.info("Copying template files into environment")
     copytree(dir_template, dir_env, True)
 
     logging.info('Copying Python installation (including pythonXX.dll into environment)')
