@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this file,
+# You can obtain one at http://mozilla.org/MPL/2.0/.
+
+import ConfigParser
 import ctypes
 import fileinput
 import fnmatch
@@ -13,8 +18,6 @@ import sys
 import urllib2
 import zipfile
 
-# Link to the folder which contains the zip archives of virtualenv
-URL_VIRTUALENV = 'https://codeload.github.com/pypa/virtualenv/zip/'
 
 VERSION_MERCURIAL = '2.6.2'
 VERSION_MOZDOWNLOAD = '1.9'
@@ -25,8 +28,42 @@ dir_assets = os.path.join(dir_base, os.path.pardir, 'assets')
 dir_env = os.path.join(dir_base, 'mozmill-env')
 dir_msys = os.path.join(dir_env, 'msys')
 dir_python = os.path.join(dir_env, 'python')
-dir_tmp=os.path.join(dir_base, 'tmp')
+dir_tmp = os.path.join(dir_base, 'tmp')
 dir_template = os.path.join(dir_base, 'templates')
+
+
+def prepare_build():
+    """
+    Prepares necessary tools for building environment.
+
+    """
+    logging.info("Delete all possible existent folders")
+    shutil.rmtree(dir_env, True)
+
+    # Ensure we have a clean and existent temporary directory
+    shutil.rmtree(dir_tmp, True)
+    os.makedirs(dir_tmp)
+
+    logging.info('Extracting virtualenv %s' % VERSION_VIRTUALENV)
+    virtualenv_file = os.path.join(dir_assets, 'virtualenv.zip')
+    virtualenv_zip = zipfile.ZipFile(virtualenv_file)
+    virtualenv_zip.extractall(dir_tmp)
+    virtualenv_zip.close()
+
+    logging.info("Extracting 7zip")
+    sevenzip_file = os.path.join(dir_assets, '7z.zip') 
+    sevenzip_dir = os.path.join(dir_tmp, '7z')
+    os.makedirs(sevenzip_dir)
+    sevenzip_zipfile = zipfile.ZipFile(sevenzip_file)
+    sevenzip_zipfile.extractall(sevenzip_dir)
+    sevenzip_zipfile.close()
+    sevenzip_file  = os.path.join(sevenzip_dir, '7za.exe')
+
+    logging.info('Extracting ConEmu')
+    conemu_file = os.path.join(dir_assets, 'conemu.7z')
+    conemu_dir_env = os.path.join(dir_env, 'ConEmu')
+    subprocess.check_call([sevenzip_file, 'x', '-o%s' % conemu_dir_env,
+                           conemu_file])
 
 
 def copytree(src, dst, symlinks=False, ignore=None):
@@ -80,15 +117,6 @@ def copytree(src, dst, symlinks=False, ignore=None):
         raise EnvironmentError(errors)
 
 
-def download(url, target):
-    """Downloads the specified url to the given target."""
-    response = urllib2.urlopen(url)
-    with open(target, 'wb') as f:
-        f.write(response.read())
-
-    return target
-
-
 def remove_files(dir_base, pattern):
     """Removes all the files matching the given pattern recursively."""
     files = [os.path.join(root, filename)
@@ -127,19 +155,7 @@ def main():
         parser.error('Version of Mozmill-Automation to be installed is required as first parameter.')
     mozmill_automation_version = args[0]
 
-    logging.info('Deleting all possible existent folders')
-    shutil.rmtree(dir_env, True)
-
-    # Ensure we have a clean and existent temporary directory
-    shutil.rmtree(dir_tmp, True)
-    os.makedirs(dir_tmp)
-
-    logging.info('Downloading virtualenv %s' % VERSION_VIRTUALENV)
-    virtualenv_file = download(URL_VIRTUALENV + VERSION_VIRTUALENV,
-                               os.path.join(dir_tmp, 'virtualenv.zip'))
-    virtualenv_zip = zipfile.ZipFile(virtualenv_file)
-    virtualenv_zip.extractall(dir_tmp)
-    virtualenv_zip.close()
+    prepare_build()
 
     logging.info('Creating new virtual environment')
     virtualenv_script = os.path.join(dir_tmp,
@@ -159,13 +175,7 @@ def main():
     msys_dll_zip.extractall(os.path.join(dir_msys, 'bin'))
     msys_dll_zip.close()
 
-    logging.info("Installing 'mintty'")
-    mintty_file = os.path.join(dir_assets, 'msys_mintty.zip')
-    mintty_zip = zipfile.ZipFile(mintty_file, 'r')
-    mintty_zip.extract('mintty.exe', os.path.join(dir_msys, 'bin'))
-    mintty_zip.close()
-
-    logging.info('Copying template files into environment')
+    logging.info("Copying template files into environment")
     copytree(dir_template, dir_env, True)
 
     logging.info('Copying Python installation (including pythonXX.dll into environment)')
